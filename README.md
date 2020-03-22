@@ -1,3 +1,9 @@
+# ColaBoard
+
+A Colaboration tool that organizes your projects into boards.
+The live site is [here](http://karn21.pythonanywhere.com/)
+
+
 # How it Works?
 1. Create a new Account.
 2. Activate Your Account.
