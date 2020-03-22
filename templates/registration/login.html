@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} Login | ColaBoard{% endblock title %}
+{% block content %}
+
+{% if form.errors %}
+<center>
+    <p class="text-primary">Your username and password didn't match or Your account is not activated.</p>
+</center>
+{% endif %}
+
+{% if next %}
+{% if user.is_authenticated %}
+<p>Your account doesn't have access to this page. To proceed,
+    please login with an account that has access.</p>
+{% else %}
+<p>Please login to see this page.</p>
+{% endif %}
+{% endif %}
+
+<div class="container">
+    <center>
+        <h1 class="display-4">Login</h1>
+    </center>
+    <div class="row">
+        <div class="col-md-6 offset-3">
+            <form method="post" action="{% url 'accounts:login' %}">
+                {% csrf_token %}
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        {{ form.username | as_crispy_field }}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        {{ form.password | as_crispy_field }}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <a href="{% url 'password_reset' %}" class='btn btn-link'>Forgot Password?</a>
+                        <button type="submit" class="btn btn-primary float-right">Login</button>
+                    </div>
+                </div>
+                <input type="hidden" name="next" value="{{ next }}">
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

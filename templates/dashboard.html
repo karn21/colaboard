@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% block title %}ColaBoard | Dashboard {% endblock title %}
+
+{% block content %}
+
+<center>
+    <h1 class="display-4"><b>Your Boards</b>
+        <a href="{% url 'boards:create_board'%}">
+            <span class="badge badge-success"><small>New<i class="fa fa-plus ml-2"
+                        aria-hidden="true"></i></small></span>
+        </a>
+    </h1>
+</center>
+
+
+<div class="card-columns mt-5">
+
+    {% for board in boards %}
+
+    <div class="card border-primary">
+
+        <div class="card-body">
+            <span class="badge badge-warning mb-2">{{board.get_board_type_display}}</span>
+            <span class="badge badge-success mb-2">Creator</span>
+            <div class="row">
+                <div class="col-sm-9">
+                    <a href="{% url 'boards:board_detail' board.slug %}">
+                        <h5 class="card-title">{{board.title}}</h5>
+                    </a>
+                </div>
+                <div class="col-sm-3">
+                    <i class="fa fa-pencil-square-o pointer" onclick="showForm({{board.pk}})" aria-hidden="true"></i>
+                    <i class="fa fa-trash-o pointer" onclick="showConfirmation({{board.pk}})" aria-hidden="true"></i>
+                </div>
+            </div>
+            <form action="{% url 'boards:board_delete' %}" method="POST" class="mb-2" style="display:none"
+                id='delete-board-{{board.pk}}'>
+                {% csrf_token %}
+                Are you sure you want to delete this Board?
+                <input type="hidden" name="board-id" value="{{board.pk}}">
+                <center><button class="btn btn-sm btn-success mt-1">Yes</button></center>
+            </form>
+            <form action="{% url 'boards:board_edit' %}" method="POST" style="display:none"
+                id='board-edit-{{board.pk}}'>
+                {% csrf_token %}
+                <input type="text" class="form-control" name="new-title" placeholder="New title for board">
+                <input type="hidden" name="board-id" value="{{board.pk}}">
+                <center><button type="submit" class="btn btn-warning mt-1">Submit</button></center>
+            </form>
+            {% for list in board.board_list.all %}
+            <div class="card bg-primary">
+                <div class="card-body text-white">
+                    <span class="mb-0">
+                        <i class="fa fa-thumb-tack" aria-hidden="true"></i>
+                        {{list.title}} - {{list.list_card.count}} card{{list.list_card.count|pluralize:",s"}}
+                    </span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+    {% endfor %}
+
+    {% for board in team_boards %}
+
+    <div class="card border-primary">
+
+        <div class="card-body">
+            <span class="badge badge-warning mb-2">{{board.get_board_type_display}}</span>
+            {% if board.creator == request.user %}
+            <span class="badge badge-success mb-2">Creator</span>
+            {% endif %}
+            <div class="row">
+                <div class="col-sm-9">
+                    <a href="{% url 'boards:board_detail' board.slug %}">
+                        <h5 class="card-title">{{board.title}}</h5>
+                    </a>
+                </div>
+                <div class="col-sm-3">
+                    <i class="fa fa-pencil-square-o pointer" onclick="showForm({{board.pk}})" aria-hidden="true"></i>
+                    <i class="fa fa-trash-o pointer" onclick="showConfirmation({{board.pk}})" aria-hidden="true"></i>
+                </div>
+            </div>
+            <form action="{% url 'boards:board_delete' %}" method="POST" class="mb-2" style="display:none"
+                id='delete-board-{{board.pk}}'>
+                {% csrf_token %}
+                Are you sure you want to delete this Board?
+                <input type="hidden" name="board-id" value="{{board.pk}}">
+                <center><button class="btn btn-sm btn-success mt-1">Yes</button></center>
+            </form>
+            <form action="{% url 'boards:board_edit' %}" method="POST" style="display:none"
+                id='board-edit-{{board.pk}}'>
+                {% csrf_token %}
+                <input type="text" class="form-control" name="new-title" placeholder="New title for board">
+                <input type="hidden" name="board-id" value="{{board.pk}}">
+                <center><button type="submit" class="btn btn-warning mt-1">Submit</button></center>
+            </form>
+            {% for list in board.board_list.all %}
+            <div class="card bg-primary">
+                <div class="card-body text-white">
+                    <span class="mb-0">
+                        <i class="fa fa-thumb-tack" aria-hidden="true"></i>
+                        {{list.title}} - {{list.list_card.count}} card{{list.list_card.count|pluralize:",s"}}
+                    </span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+    {% endfor %}
+
+</div>
+
+
+
+<script>
+    function showForm(list_id) {
+        id = 'board-edit-' + list_id
+        var x = document.getElementById(id);
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+        confirmId = 'delete-board-' + list_id
+        var y = document.getElementById(confirmId);
+        y.style.display = "none";
+    }
+    function showConfirmation(list_id) {
+        id = 'delete-board-' + list_id
+        var x = document.getElementById(id);
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+        confirmId = 'board-edit-' + list_id
+        var y = document.getElementById(confirmId);
+        y.style.display = "none";
+    }
+</script>
+
+
+{% endblock content %}

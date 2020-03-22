@@ -1,0 +1,8 @@
+{% autoescape off %}
+Hi {{ user.username }},
+
+You have been invited by {{by_user.username}} to work on {{board.title}} board.
+
+Go ahead and check it out.
+http://{{ domain }}{% url 'boards:dashboard' %}
+{% endautoescape %}

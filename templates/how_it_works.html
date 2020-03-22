@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %} Features | ColaBoard{% endblock title %}
+{% block extra_head %}
+<style>
+    html {
+        background-color: #fff;
+        color: #555;
+        font-weight: 300;
+        font-family: 'Lato', 'Arial', sans-serif;
+        font-size: 20px;
+        text-rendering: optimizeLegibility;
+        overflow-x: hidden;
+    }
+
+    ol {
+        letter-spacing: 1px;
+        word-spacing: 2px;
+        line-height: 200%;
+    }
+</style>
+
+{% endblock extra_head %}
+
+{% block content %}
+<h1 class="display-4 text-center">How it Works?</h1>
+
+<ol style="font-size:18px">
+    <li>Create a new Account.</li>
+    <li>Activate Your Account.</li>
+    <li>If you forget your Password you can reset it.</li>
+    <li>
+        Create a new Board for your Task. It can either be Personal or Team.
+    </li>
+    <li>
+        If it is a Team board-
+        <ul>
+            <li>You will be asked for E-mail id of your team.</li>
+            <li>If there is a ColaBoard Account with that E-mail, they will receive an E-mail confirmation.</li>
+            <li>Else they will receive an invitation link. They can create an account and join.</li>
+        </ul>
+    </li>
+    <li>Now Create Lists for your Boards. You can have any no of lists for a Board.</li>
+    <li>Add cards to your Lists.</li>
+</ol>
+
+<h1 class="display-4 text-center">Features</h1>
+<ol style="font-size:18px">
+    <li>You can edit any board, list or card.</li>
+    <li>You can delete any board, list or card.</li>
+    <li>You can add attachments to your Cards.</li>
+    <li>Only the creator can delete board, list or card for a Team Board</li>
+    <li>You can invite team to your board at any time. This will convert your personal board to Team board</li>
+    <li>You can add multiple cards at once</li>
+    <li>
+        Following Actions can be done on cards:-
+        <ul>
+            <li>Edit or Delete any card.</li>
+            <li>Archive any card.</li>
+            <li>Move any card to any list in the current board.</li>
+            <li>Check/Uncheck any Card like a Checklist</li>
+        </ul>
+    </li>
+</ol>
+
+{% endblock %}

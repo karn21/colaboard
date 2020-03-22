@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %} Signup | ColaBoard{% endblock title %}
+
+{% block content %}
+
+{% if next %}
+{% if user.is_authenticated %}
+<p>Your account doesn't have access to this page. To proceed,
+    please login with an account that has access.</p>
+{% else %}
+<p>Please login to see this page.</p>
+{% endif %}
+{% endif %}
+
+<div class="container">
+    <center>
+        <h1 class="display-4">Signup</h1>
+    </center>
+    <div class="row">
+        <div class="col-md-6 offset-3">
+            <form method="post" action="{% url 'accounts:signup' %}">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        {{ field | as_crispy_field }}
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <button type="submit" class="btn btn-primary float-right">Sign Up</button>
+                    </div>
+                </div>
+                <input type="hidden" name="next" value="{{ next }}">
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

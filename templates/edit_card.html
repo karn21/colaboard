@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% include 'navbar.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Edit Card | ColaBoard{% endblock title %}
+{% block content %}
+
+<div class="container">
+    <center>
+        <h1 class="display-4">Edit Card</h1>
+    </center>
+    <div class="row">
+        <div class="col-md-6 offset-3">
+            <form method="post" action="." enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        {{ field | as_crispy_field }}
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <button type="submit" class="btn btn-primary float-right">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

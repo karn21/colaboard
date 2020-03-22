@@ -1,0 +1,306 @@
+{% extends 'base.html' %}
+{% block title %}ColaBoard | Board {% endblock title %}
+
+{% block content %}
+
+<center>
+    <h3 class="display-4"><b>{{board.title}}</b>
+        <a href="{% url 'boards:create_list' board.slug %}">
+            <span class="badge badge-success"><small>List<i class="fa fa-plus ml-2"
+                        aria-hidden="true"></i></small></span>
+        </a>
+    </h3>
+
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#staticBackdrop">
+        Invite Team
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Invite Team</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{% url 'boards:board_invite' board.slug %}" method="POST">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <input type="text" class="form-control" name="invite">
+                        <input type="text" style="display:none" value="{{invite_link}}" id='invite-link'>
+                        <div class="small text-muted">Enter E-mail id of your team members seperated by comma.</div>
+                        <span class="text-secondary">Or copy this link: {{invite_link}}</span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</center>
+
+<div class="card-group mt-5">
+    {% for list in board.board_list.all %}
+    <div class="col-md-4 mb-3">
+        <div class="card bg-secondary">
+            <div class="card-body p-2 text-white">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <h5 class="card-title text-white">{{list.title}}</h5>
+                    </div>
+                    <div class="col-sm-3">
+                        <i class="fa fa-pencil-square-o pointer" onclick="showRenameForm({{list.pk}})"
+                            aria-hidden="true"></i>
+                        <i class="fa fa-trash-o pointer" onclick="showConfirmation({{list.pk}})" aria-hidden="true"></i>
+                    </div>
+                </div>
+                <form action="{% url 'boards:list_delete' %}" method="POST" class="mb-2" style="display:none"
+                    id='delete-list-{{list.pk}}'>
+                    {% csrf_token %}
+                    Are you sure you want to delete this List?
+                    <input type="hidden" name="list-id" value="{{list.pk}}">
+                    <center><button class="btn btn-sm btn-success mt-1">Yes</button></center>
+                </form>
+                <form action="{% url 'boards:list_edit' %}" method="POST" style="display:none"
+                    id='list-edit-{{list.pk}}'>
+                    {% csrf_token %}
+                    <input type="text" class="form-control" name="new-title" placeholder="New title for List">
+                    <input type="hidden" name="list-id" value="{{list.pk}}">
+                    <center><button type="submit" class="btn btn-warning mt-1">Submit</button></center>
+                </form>
+                {% for card in list.get_non_archived_cards %}
+                <div class="accordion" id="accordionExample">
+                    <div class="card mb-2">
+                        <div class="card-header" id="heading-{{list.pk}}-{{card.pk}}">
+                            <span class="mb-0 text-dark">
+                                <div class="row">
+                                    <div class="col-sm-9">
+                                        {% if card.checked %}
+                                        <a href="{% url 'boards:card_check' card.pk %}">
+                                            <i class="fa fa-check-square-o text-success" aria-hidden="true"></i>
+                                        </a>
+                                        {% else %}
+                                        <a href="{% url 'boards:card_check' card.pk %}">
+                                            <i class="fa fa-square-o text-dark" aria-hidden="true"></i>
+                                        </a>
+                                        {% endif %}
+                                        <strong>{{card.title}}</strong>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <a href="{% url 'boards:card_edit' card.pk %}">
+                                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                                        </a>
+                                        <i class="fa fa-trash text-danger pointer"
+                                            onclick="showCardConfirmation({{card.pk}})" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-1">
+                                    <div class="col-sm-10">
+                                        <span class="text-secondary"><i class="fa fa-calendar-o" aria-hidden="true"></i>
+                                            {{card.due_date}}
+                                        </span>
+                                        <small><a href="{% url 'boards:card_archive' card.pk %}"><span
+                                                    class="badge badge-info">Archive</span></a></small>
+                                        <small><a href="{% url 'boards:card_move' card.pk %}"><span
+                                                    class="badge badge-success">Move</span></a></small>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                            data-target="#collapse-{{list.pk}}-{{card.pk}}" aria-expanded="false"
+                                            aria-controls="collapse-{{list.pk}}-{{card.pk}}">
+                                            <i class="fa fa-angle-down fa-lg" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </span>
+                            <form action="{% url 'boards:card_delete' %}" method="POST" class="mb-2"
+                                style="display:none" id='delete-card-{{card.pk}}'>
+                                {% csrf_token %}
+                                <span class="text-dark">
+                                    Are you sure you want to delete this Card?
+                                </span>
+                                <input type="hidden" name="card-id" value="{{card.pk}}">
+                                <center><button class="btn btn-sm btn-success mt-1">Yes</button></center>
+                            </form>
+                        </div>
+
+                        <div id="collapse-{{list.pk}}-{{card.pk}}" class="collapse"
+                            aria-labelledby="heading-{{list.pk}}-{{card.pk}}" data-parent="#accordionExample">
+                            <div class="card-body text-dark">
+                                {{card.description}}
+                            </div>
+                            {% if card.attachment %}
+                            <a href="{{card.attachment.url}}" target="_blank">
+                                <center>
+                                    <button class="btn btn-link">View Attachment</button>
+                                </center>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% if list.get_archived_cards %}
+                <button class="btn btn-link btn-block text-white" id="btn-archive-{{list.pk}}"
+                    onclick=archive({{list.pk}})>View Archived</i></button>
+                {% endif %}
+                <div style="display:none" id="archived-{{list.pk}}">
+                    {% for card in list.get_archived_cards %}
+                    <div class="accordion">
+                        <div class="card mb-2">
+                            <div class="card-header" id="heading-{{list.pk}}-{{card.pk}}">
+                                <span class="mb-0 text-dark">
+                                    <div class="row">
+                                        <div class="col-sm-9">
+                                            <strong>{{card.title}}</strong>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <small><span class="badge badge-danger">Archived</span></small>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-1">
+                                        <div class="col-sm-10">
+                                            <span class="text-secondary"><i class="fa fa-calendar-o"
+                                                    aria-hidden="true"></i>
+                                                {{card.due_date}}
+                                            </span>
+                                            <small><a href="{% url 'boards:card_archive' card.pk %}"><span
+                                                        class="badge badge-info">Unarchive</span></a></small>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                                data-target="#collapse-{{list.pk}}-{{card.pk}}" aria-expanded="false"
+                                                aria-controls="collapse-{{list.pk}}-{{card.pk}}">
+                                                <i class="fa fa-angle-down fa-lg" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </span>
+                                <form action="{% url 'boards:card_delete' %}" method="POST" class="mb-2"
+                                    style="display:none" id='delete-card-{{card.pk}}'>
+                                    {% csrf_token %}
+                                    <span class="text-dark">
+                                        Are you sure you want to delete this Card?
+                                    </span>
+                                    <input type="hidden" name="card-id" value="{{card.pk}}">
+                                    <center><button class="btn btn-sm btn-success mt-1">Yes</button></center>
+                                </form>
+                            </div>
+
+                            <div id="collapse-{{list.pk}}-{{card.pk}}" class="collapse"
+                                aria-labelledby="heading-{{list.pk}}-{{card.pk}}" data-parent="#accordionExample">
+                                <div class="card-body text-dark">
+                                    {{card.description}}
+                                </div>
+                                {% if card.attachment %}
+                                <a href="{{card.attachment.url}}" target="_blank">
+                                    <center>
+                                        <button class="btn btn-link">View Attachment</button>
+                                    </center>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+
+
+
+
+                <button class="btn btn-block btn-warning" onclick="showForm({{list.pk}})" list_id={{list.pk}}>Add
+                    Card</button>
+
+                <form action="{% url 'boards:create_card' %}" method="POST" id='add-card-{{list.pk}}'
+                    enctype="multipart/form-data" style="display:none">
+                    {% csrf_token %}
+                    <input type="hidden" name="list-id" value="{{ list.pk }}">
+                    {{form.as_p}}
+                    <center>
+                        <button class="btn btn-warning" type="submit">Submit</button>
+                    </center>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% empty %}
+    <span>
+        <h5>
+            You Do not have any Lists.
+        </h5>
+    </span>
+    {% endfor %}
+</div>
+
+<script>
+    function showForm(list_id) {
+        id = 'add-card-' + list_id
+        var x = document.getElementById(id);
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+    function showRenameForm(list_id) {
+        id = 'list-edit-' + list_id
+        var x = document.getElementById(id);
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+        confirmId = 'delete-list-' + list_id
+        var y = document.getElementById(confirmId);
+        y.style.display = "none";
+    }
+    function showConfirmation(list_id) {
+        id = 'delete-list-' + list_id
+        var x = document.getElementById(id);
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+        confirmId = 'list-edit-' + list_id
+        var y = document.getElementById(confirmId);
+        y.style.display = "none";
+    }
+    function showCardConfirmation(list_id) {
+        id = 'delete-card-' + list_id
+        var x = document.getElementById(id);
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+    function archive(list_id) {
+        id = 'archived-' + list_id
+        id2 = 'btn-archive-' + list_id
+        var x = document.getElementById(id);
+        var y = document.getElementById(id2);
+        if (x.style.display === "none") {
+            x.style.display = "block";
+            y.innerHTML = "Hide Archived";
+        } else {
+            x.style.display = "none";
+            y.innerHTML = "Show Archived";
+        }
+    }
+</script>
+
+
+{% endblock content %}

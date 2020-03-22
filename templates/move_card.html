@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% include 'navbar.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Move Card | ColaBoard{% endblock title %}
+
+{% block content %}
+
+<div class="container">
+    <center>
+        <h1 class="display-4">Move Card</h1>
+    </center>
+    <div class="row">
+        <div class="col-md-6 offset-3">
+            <form method="post" action=".">
+                {% csrf_token %}
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <div id="div_id_board_type" class="form-group">
+                            <label for="id_board_type" class="col-form-label  requiredField">
+                                Move the Card to:
+                            </label>
+                            <div class="">
+                                <select name="new_list" class="select form-control" required=True>
+                                    <option value="" selected="">---------</option>
+                                    {% for list in board_lists %}
+                                    <option value={{list.pk}}>{{list.title}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <button type="submit" class="btn btn-primary float-right">Move</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
