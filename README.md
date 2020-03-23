@@ -3,6 +3,13 @@
 A Colaboration tool that organizes your projects into boards.
 The live site is [here](http://karn21.pythonanywhere.com/)
 
+## Screenshots
+
+### Dashboard
+![Dashboard](https://github.com/karn21/colaboard/blob/master/dashboardcolaboard.png)
+  
+### Board Detail
+![Board Detail](https://github.com/karn21/colaboard/blob/master/board-detail.png)
 
 # How it Works?
 1. Create a new Account.
