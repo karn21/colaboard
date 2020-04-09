@@ -17,18 +17,18 @@
 
     {% for board in boards %}
 
-    <div class="card border-primary">
+    <div class="card border-primary mb-3">
 
         <div class="card-body">
             <span class="badge badge-warning mb-2">{{board.get_board_type_display}}</span>
             <span class="badge badge-success mb-2">Creator</span>
             <div class="row">
-                <div class="col-sm-9">
+                <div class="col-9">
                     <a href="{% url 'boards:board_detail' board.slug %}">
                         <h5 class="card-title">{{board.title}}</h5>
                     </a>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-3">
                     <i class="fa fa-pencil-square-o pointer" onclick="showForm({{board.pk}})" aria-hidden="true"></i>
                     <i class="fa fa-trash-o pointer" onclick="showConfirmation({{board.pk}})" aria-hidden="true"></i>
                 </div>
@@ -64,7 +64,7 @@
 
     {% for board in team_boards %}
 
-    <div class="card border-primary">
+    <div class="card border-primary mb-3">
 
         <div class="card-body">
             <span class="badge badge-warning mb-2">{{board.get_board_type_display}}</span>
@@ -72,12 +72,12 @@
             <span class="badge badge-success mb-2">Creator</span>
             {% endif %}
             <div class="row">
-                <div class="col-sm-9">
+                <div class="col-9">
                     <a href="{% url 'boards:board_detail' board.slug %}">
                         <h5 class="card-title">{{board.title}}</h5>
                     </a>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-3">
                     <i class="fa fa-pencil-square-o pointer" onclick="showForm({{board.pk}})" aria-hidden="true"></i>
                     <i class="fa fa-trash-o pointer" onclick="showConfirmation({{board.pk}})" aria-hidden="true"></i>
                 </div>

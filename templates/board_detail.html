@@ -13,7 +13,7 @@
 
 
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#staticBackdrop">
+    <button type="button" class="btn btn-dark mt-3" data-toggle="modal" data-target="#staticBackdrop">
         Invite Team
     </button>
 
@@ -34,7 +34,7 @@
                         <input type="text" class="form-control" name="invite">
                         <input type="text" style="display:none" value="{{invite_link}}" id='invite-link'>
                         <div class="small text-muted">Enter E-mail id of your team members seperated by comma.</div>
-                        <span class="text-secondary">Or copy this link: {{invite_link}}</span>
+                        <span class="text-secondary">Or copy this link: <small>{{invite_link}}</small></span>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -53,10 +53,10 @@
         <div class="card bg-secondary">
             <div class="card-body p-2 text-white">
                 <div class="row">
-                    <div class="col-sm-9">
+                    <div class="col-9">
                         <h5 class="card-title text-white">{{list.title}}</h5>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-3">
                         <i class="fa fa-pencil-square-o pointer" onclick="showRenameForm({{list.pk}})"
                             aria-hidden="true"></i>
                         <i class="fa fa-trash-o pointer" onclick="showConfirmation({{list.pk}})" aria-hidden="true"></i>
@@ -82,7 +82,7 @@
                         <div class="card-header" id="heading-{{list.pk}}-{{card.pk}}">
                             <span class="mb-0 text-dark">
                                 <div class="row">
-                                    <div class="col-sm-9">
+                                    <div class="col-9">
                                         {% if card.checked %}
                                         <a href="{% url 'boards:card_check' card.pk %}">
                                             <i class="fa fa-check-square-o text-success" aria-hidden="true"></i>
@@ -94,7 +94,7 @@
                                         {% endif %}
                                         <strong>{{card.title}}</strong>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-3">
                                         <a href="{% url 'boards:card_edit' card.pk %}">
                                             <i class="fa fa-pencil" aria-hidden="true"></i>
                                         </a>
@@ -104,7 +104,7 @@
                                 </div>
 
                                 <div class="row mt-1">
-                                    <div class="col-sm-10">
+                                    <div class="col-10">
                                         <span class="text-secondary"><i class="fa fa-calendar-o" aria-hidden="true"></i>
                                             {{card.due_date}}
                                         </span>
@@ -113,7 +113,7 @@
                                         <small><a href="{% url 'boards:card_move' card.pk %}"><span
                                                     class="badge badge-success">Move</span></a></small>
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-2">
                                         <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
                                             data-target="#collapse-{{list.pk}}-{{card.pk}}" aria-expanded="false"
                                             aria-controls="collapse-{{list.pk}}-{{card.pk}}">

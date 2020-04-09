@@ -1,4 +1,4 @@
-<nav class="navbar  fixed-top navbar-expand-lg navbar-light mb-3" style="background-color: #abd6f5;">
+<nav class="navbar fixed-top navbar-expand-lg navbar-light mb-3" style="background-color: #abd6f5;">
     <a class="navbar-brand ml-5" href="{% url 'home' %}">
         <i class="fa fa-clipboard d-inline-block align-top fa-lg" aria-hidden="true"></i>
         <strong class="text-primary">ColaBoard</strong>
@@ -9,7 +9,7 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <div class="float-right ml-5">
+        <div class="float-left ml-5">
             <ul class="navbar-nav">
                 <li class="nav-item">
                     {% if request.user.is_authenticated %}
