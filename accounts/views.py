@@ -18,7 +18,7 @@ def signup(request):
             user.is_active = False
             user.save()
             current_site = request.META['HTTP_HOST']
-            subject = 'Activate Your MySite Account'
+            subject = 'Activate Your ColaBoard Account'
             message = render_to_string('registration/account_activation_email.html', {
                 'user': user,
                 'domain': current_site,
